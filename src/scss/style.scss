@@ -1,0 +1,68 @@
+$fa-font-path: "~font-awesome/fonts";
+
+@import '~font-awesome/scss/font-awesome.scss';
+@import "~bootstrap/scss/bootstrap";
+
+// MAIN
+.header {
+  margin-bottom: 100px;
+}
+
+// Deposit
+.deposit__title {
+  display: inline-block;
+  margin-right: 20px;
+}
+
+// Currency
+.currency__select__label {
+  margin-right: 10px;
+}
+.currency__select {
+  margin-top: 14px;
+  border-color: #b2d1f0;
+  color: #2a6acd;
+  background-color: #fff;
+  outline: none;
+}
+
+// Table
+.table__widget td {
+  text-align: center;
+}
+.table__icon {
+  padding: 3px 2px;
+  color: #fff;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-right: 10px;
+}
+.table__icon--ruble {
+  background: #2765cc;
+}
+.table__icon--dollar {
+  background: #299932;
+}
+.table__icon--euro {
+  background: #f79904;
+}
+.table__icon--yen {
+  background: #ee2222;
+}
+
+.table__input {
+  padding: 0 10px;
+  width: 120px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #eee;
+  color: #333;
+}
+
+.table__button {
+  cursor: pointer;
+}
+.table__button i {
+  font-size: 12px;
+}
+
