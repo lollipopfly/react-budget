@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import Deposit from '../Deposit';
-import Currency from '../Currency';
-import Table from '../Table';
+import Deposit from '../Deposit/deposit';
+import Currency from '../Currency/currency';
+import Table from '../Table/table';
 
 class App extends Component {
   constructor(props) {
@@ -27,7 +27,7 @@ class App extends Component {
 
           <div className="row">
             <div className="col-7">
-              <Table />
+             {/* <Table /> */}
             </div>
 
             <div className="col-5">

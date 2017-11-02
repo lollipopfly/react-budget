@@ -1,14 +1,12 @@
 React Budget
 ===================
 
-----------
 
-
-###Start dev server###
+### Start dev serve
 > npm run serve
 
-###Watch###
+### Watch
 > npm run watch
 
-###Production###
+### Production###
 > npm run production
