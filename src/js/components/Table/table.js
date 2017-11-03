@@ -5,9 +5,13 @@ class Table extends Component {
   constructor(props) {
     super(props);
   }
+  showModal() {
+    $('#myModal').modal()
+  }
   render() {
     return (
       <div>
+        {/*
         <table className="table table__widget">
           <thead>
             <tr>
@@ -51,8 +55,14 @@ class Table extends Component {
             </tr>
           </tbody>
         </table>
+      */}
 
-        <button className="table__button btn btn-primary btn-sm"><i className="fa fa-plus"></i> Валюта</button>
+        <button onClick={this.showModal}
+                data-target="#modal"
+                className="table__button btn btn-primary btn-sm">
+          <i className="fa fa-plus"></i>
+          &nbsp;Валюта
+        </button>
       </div>
     )
   }

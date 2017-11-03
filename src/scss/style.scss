@@ -4,6 +4,9 @@ $fa-font-path: "~font-awesome/fonts";
 @import "~bootstrap/scss/bootstrap";
 
 // MAIN
+.hidden {
+  display: none !important;
+}
 .header {
   margin-bottom: 100px;
 }
@@ -24,6 +27,9 @@ $fa-font-path: "~font-awesome/fonts";
   color: #2a6acd;
   background-color: #fff;
   outline: none;
+}
+.currency__select--lg {
+  width: 50px;
 }
 
 // Table

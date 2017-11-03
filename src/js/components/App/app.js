@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import Deposit from '../Deposit/deposit';
 import Currency from '../Currency/currency';
 import Table from '../Table/table';
+import Modal from '../Modal/modal';
+
+global.Tether = require('tether');
+require('bootstrap');
 
 class App extends Component {
   constructor(props) {
@@ -27,7 +31,7 @@ class App extends Component {
 
           <div className="row">
             <div className="col-7">
-             {/* <Table /> */}
+              <Table />
             </div>
 
             <div className="col-5">
@@ -35,6 +39,8 @@ class App extends Component {
             </div>
           </div>
         </div>
+
+        <Modal />
       </div>
     )
   }
