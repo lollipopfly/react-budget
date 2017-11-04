@@ -41,18 +41,15 @@ class NewComponent extends Component {
   }
   save(e) {
     e.preventDefault();
-    var budget = localStorage.getItem('budget');
+    var budget = JSON.parse(localStorage.getItem('budget'));
 
-    if(budget) {
-      budget = JSON.parse(budget);
-      budget.push(this.state.budget);
-    } else {
-      budget = [];
-      budget.push(this.state.budget);
-    }
+    budget.currency = this.state.budget.currency;
+    budget.budget.push(this.state.budget);
 
     localStorage.setItem('budget', [JSON.stringify(budget)]);
     this.setState({ isSuccess: true});
+
+    // TODO: save redux state
 
     setTimeout(function() {
       $('#myModal').modal('hide');
@@ -70,6 +67,7 @@ class NewComponent extends Component {
     var defaultBudget = {
       sum: '',
       currency: defaultCurrency,
+      deposit: ''
     }
 
     return defaultBudget;
@@ -111,6 +109,10 @@ class NewComponent extends Component {
                   <div>
                     <label>Сумма &nbsp;</label>
                     <input name="sum" required type="text" value={this.state.budget.sum} onChange={this.handleChange} />
+                  </div>
+                  <div>
+                    <label>Ставка вкладов,(%) &nbsp;</label>
+                    <input name="deposit" required type="text" value={this.state.budget.deposit} onChange={this.handleChange} />
                   </div>
 
                 </div>

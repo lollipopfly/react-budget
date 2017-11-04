@@ -1,61 +1,65 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 
 class Currency extends Component {
   constructor(props) {
     super(props);
 
-    let defaultTmpValue;
-    let currencies = [
-      {
-        text: '₽',
-        value: 'ruble'
-      },
-      {
-        text: '$',
-        value: 'dollar'
-      },
-      {
-        text: '€',
-        value: 'euro'
-      },
-      {
-        text: '¥',
-        value: 'yen'
-      },
-    ];
+    this.changeCurrency = this.changeCurrency.bind(this);
 
-    if(!(defaultTmpValue = localStorage.getItem('currentCurrency'))) {
-      defaultTmpValue = 'ruble';
+    let isShow = false;
+    let currencies = {
+      'ruble': '₽',
+      'dollar': '$',
+      'euro': '€',
+      'yen': '¥'
+    };
+
+    // TODO: 1.сделать live появление/показ после добавления строки в бюджет
+    // 2. обновление selecta - если добавили строку с несущ в селекте currency
+
+    if(this.props.myState.budget.length > 0) {
+      isShow = true
     }
 
     this.state = {
-      defaultValue: defaultTmpValue
-    };
+      isShow: isShow,
+    }
 
-    // Generate options
-    this.optionList = currencies.map((option, key) =>
-      <option key={key} value={option.value}>
-        {option.text}
+    // Make uniqe currencies
+    var currenciesList = [];
+    this.props.myState.budget.forEach( function( item ) {
+      if(currenciesList.indexOf(item.currency) == -1) {
+        currenciesList.push(item.currency);
+      }
+    });
+
+    // Generate options tags
+    this.optionList = currenciesList.map((item, key) =>
+      <option key={key} value={item}>
+        {currencies[item]}
       </option>
     );
-
-    this.changeCurrency = this.changeCurrency.bind(this);
   }
 
   // Save current currency
   changeCurrency(e) {
-    localStorage.setItem('currentCurrency', e.target.value);
+    var budget = JSON.parse(localStorage.getItem('budget'));
+    budget.currency = e.target.value;
+
+    localStorage.setItem('budget', JSON.stringify(budget));
+    this.props.onChangeCurrency(e.target.value);
   }
   render() {
     return (
-      <div className="text-right">
+      <div className={this.state.isShow ? 'text-right' : 'hidden'}>
         <label className="currency__select__label form-check-label">Моя валюта</label>
 
         <select
           className="currency__select"
           onChange={this.changeCurrency}
-          defaultValue={this.state.defaultValue}>
+          defaultValue={this.props.myState.currency}>
           {this.optionList}
         </select>
 
@@ -64,4 +68,13 @@ class Currency extends Component {
   }
 }
 
-export default Currency;
+export default connect(
+  state => ({
+    myState: state
+  }),
+  dispatch => ({
+    onChangeCurrency: (status) => {
+      dispatch({type: 'CHANGE_CURRENCY', status: status})
+    }
+  })
+)(Currency);

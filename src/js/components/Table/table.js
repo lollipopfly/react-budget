@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 
 class Table extends Component {
   constructor(props) {
@@ -11,12 +12,16 @@ class Table extends Component {
   render() {
     return (
       <div>
-        {/*
         <table className="table table__widget">
           <thead>
             <tr>
               <th>Сбережения</th>
-              <th>В моей валюте, &#8381;</th>
+              <th>
+                В моей валюте
+                <span className={this.props.myState.currency ? '' : 'hidden'}>
+                  ,&nbsp; <i className={'fa fa-' + this.props.myState.currency}></i>
+                </span>
+              </th>
               <th>Ставки вкладов, %</th>
             </tr>
           </thead>
@@ -24,38 +29,15 @@ class Table extends Component {
             <tr>
               <td>
                 <i className="fa fa-ruble table__icon table__icon--ruble"></i>
-                <input className="table__input" value="2500000" type="text"/>
+                {/*<input className="table__input" value="2500000" type="text"/>*/}
               </td>
               <td>250000</td>
-              <td><input className="table__input" value="22" type="text"/></td>
-            </tr>
-            <tr>
               <td>
-                <i className="fa fa-dollar table__icon table__icon--dollar"></i>
-                <input className="table__input" value="2500000" type="text"/>
+                {/*<input className="table__input" value="22" type="text"/> */}
               </td>
-              <td>250000</td>
-              <td><input className="table__input" value="22" type="text"/></td>
-            </tr>
-            <tr>
-              <td>
-                <i className="fa fa-euro table__icon table__icon--euro"></i>
-                <input className="table__input" value="2500000" type="text"/>
-              </td>
-              <td>250000</td>
-              <td><input className="table__input" value="22" type="text"/></td>
-            </tr>
-            <tr>
-              <td>
-                <i className="fa fa-yen table__icon table__icon--yen"></i>
-                <input className="table__input" value="2500000" type="text"/>
-              </td>
-              <td>250000</td>
-              <td><input className="table__input" value="22" type="text"/></td>
             </tr>
           </tbody>
         </table>
-      */}
 
         <button onClick={this.showModal}
                 data-target="#modal"
@@ -68,4 +50,9 @@ class Table extends Component {
   }
 }
 
-export default Table;
+export default connect(
+  state => ({
+    myState: state
+  }),
+  dispatch => ({})
+)(Table);
