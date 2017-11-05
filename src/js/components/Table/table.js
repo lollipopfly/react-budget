@@ -127,7 +127,10 @@ class Table extends Component {
                     <i className={'fa fa-' + item.currency + ' table__icon table__icon--' + item.currency}></i>
                     {item.sum}
                   </td>
-                  <td>{item.defaultCurrencySum}</td>
+                  <td>
+                    <i className={item.defaultCurrencySum ? 'hidden' : 'fa fa-spinner fa-spin'}></i>
+                    {item.defaultCurrencySum}
+                  </td>
                   <td><input
                     type="number"
                     className="table__input"
