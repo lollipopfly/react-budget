@@ -31,6 +31,11 @@ function budget(state = initialState, action) {
         ...state,
         currency: action.status
       };
+    case 'ADD_TO_BUDGET':
+      return {
+        ...state,
+        budget: [...state.budget, action.budgetItem]
+      }
     default:
       return state;
       break;

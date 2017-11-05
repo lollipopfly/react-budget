@@ -5,6 +5,26 @@ import { connect } from 'react-redux';
 class Table extends Component {
   constructor(props) {
     super(props);
+    this.changeCurrency = this.changeCurrency.bind(this);
+
+    this.budgetList = false;
+
+    // Make rows
+    // if(this.props.myState.budget) {
+      // this.budgetList = this.props.myState.budget.map((item, key) =>
+      //   <tr key={key}>
+      //     <td>
+      //       <i className={'fa fa-' + item.currency + 'table__icon table__icon--ruble'}></i>
+      //       {item.sum}
+      //     </td>
+      //     <td>250000</td>
+      //     <td>{item.deposit}</td>
+      //   </tr>
+      // );
+    // }
+  }
+  changeCurrency(e) {
+    console.log(e.target.value);
   }
   showModal() {
     $('#myModal').modal()
@@ -26,16 +46,25 @@ class Table extends Component {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <i className="fa fa-ruble table__icon table__icon--ruble"></i>
-                {/*<input className="table__input" value="2500000" type="text"/>*/}
-              </td>
-              <td>250000</td>
-              <td>
-                {/*<input className="table__input" value="22" type="text"/> */}
-              </td>
-            </tr>
+            {
+              this.props.myState.budget.map((item, index) =>
+                <tr key={index}>
+                  <td>
+                    <i className={'fa fa-' + item.currency + ' table__icon table__icon--' + item.currency}></i>
+                    {item.sum}
+                  </td>
+                  <td>250000</td>
+
+                  <td><input
+                    type="number"
+                    className="table__input"
+                    value={item.deposit}
+                    disabled={this.props.myState.deposit}
+                    onChange={this.changeCurrency}
+                    /></td>
+                </tr>
+              )
+            }
           </tbody>
         </table>
 

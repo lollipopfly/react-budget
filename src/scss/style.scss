@@ -37,9 +37,6 @@ $fa-font-path: "~font-awesome/fonts";
 }
 
 // Table
-.table__widget td {
-  text-align: center;
-}
 .table__icon {
   padding: 3px 2px;
   color: #fff;
@@ -65,8 +62,12 @@ $fa-font-path: "~font-awesome/fonts";
   width: 120px;
   box-sizing: border-box;
   border-radius: 5px;
-  border: 1px solid #eee;
+  border: 1px solid #afafaf;
   color: #333;
+}
+.table__input[disabled] {
+  border: 1px solid #eee;
+  color: #e3e3e3;
 }
 
 .table__button {

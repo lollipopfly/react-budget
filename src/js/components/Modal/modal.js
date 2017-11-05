@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 
-class NewComponent extends Component {
+class Modal extends Component {
   constructor(props) {
     super(props);
 
@@ -32,7 +33,7 @@ class NewComponent extends Component {
       },
     ];
 
-    // Generate options
+    // Make options
     this.optionList = currencies.map((option, key) =>
       <option key={key} value={option.value}>
         {option.text}
@@ -47,9 +48,11 @@ class NewComponent extends Component {
     budget.budget.push(this.state.budget);
 
     localStorage.setItem('budget', [JSON.stringify(budget)]);
-    this.setState({ isSuccess: true});
 
-    // TODO: save redux state
+    // Update Redux store
+    this.props.onSave(this.state.budget);
+
+    this.setState({ isSuccess: true});
 
     setTimeout(function() {
       $('#myModal').modal('hide');
@@ -108,11 +111,11 @@ class NewComponent extends Component {
                   </div>
                   <div>
                     <label>Сумма &nbsp;</label>
-                    <input name="sum" required type="text" value={this.state.budget.sum} onChange={this.handleChange} />
+                    <input name="sum" required type="number" value={this.state.budget.sum} onChange={this.handleChange} />
                   </div>
                   <div>
                     <label>Ставка вкладов,(%) &nbsp;</label>
-                    <input name="deposit" required type="text" value={this.state.budget.deposit} onChange={this.handleChange} />
+                    <input name="deposit" type="number" value={this.state.budget.deposit} onChange={this.handleChange} />
                   </div>
 
                 </div>
@@ -135,4 +138,13 @@ class NewComponent extends Component {
   }
 }
 
-export default NewComponent;
+export default connect(
+  state => ({
+    myState: state
+  }),
+  dispatch => ({
+    onSave: (budgetItem) => {
+      dispatch({type: 'ADD_TO_BUDGET', budgetItem: budgetItem})
+    }
+  })
+)(Modal);
