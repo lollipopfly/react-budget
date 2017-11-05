@@ -43,9 +43,10 @@ class Modal extends Component {
   save(e) {
     e.preventDefault();
     var budget = JSON.parse(localStorage.getItem('budget'));
-
+    var isEmptySelect = false;
     // Set currency if have not currency
     if(!budget.currency) {
+      isEmptySelect = true;
       budget.currency = this.state.budget.currency;
     }
 
@@ -53,7 +54,7 @@ class Modal extends Component {
     localStorage.setItem('budget', [JSON.stringify(budget)]);
 
     // Update Redux store
-    this.props.onSave(this.state.budget);
+    this.props.onSave(this.state.budget, this.state.budget.currency, isEmptySelect);
 
     this.setState({ isSuccess: true});
 
@@ -147,8 +148,13 @@ export default connect(
     myState: state
   }),
   dispatch => ({
-    onSave: (budgetItem) => {
-      dispatch({type: 'ADD_TO_BUDGET', budgetItem: budgetItem})
+    onSave: (budgetItem, status, isEmptySelect) => {
+      dispatch({type: 'ADD_TO_BUDGET', budgetItem: budgetItem});
+
+      // If first time
+      if(isEmptySelect) {
+        dispatch({type: 'CHANGE_CURRENCY', status: status});
+      }
     }
   })
 )(Modal);

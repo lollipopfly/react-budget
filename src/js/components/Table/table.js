@@ -28,6 +28,7 @@ class Table extends Component {
     }
   }
   getExchange(url, date, cookieName, shortCurrencies) {
+    console.log('update');
     // Make uniqe currencies
     var self = this;
     var currenciesList = this.getUniqueCurrencies(shortCurrencies);
@@ -157,7 +158,7 @@ export default connect(
   }),
   dispatch => ({
     onUpdateBudget: (budget) => {
-      dispatch({type: 'UPDATE_BUDGET', budget: budget})
+      dispatch({type: 'UPDATE_BUDGET', budget: budget});
     }
   })
 )(Table);
