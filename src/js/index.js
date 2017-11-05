@@ -17,7 +17,6 @@ if(!localStorage.getItem('budget')) {
 } else {
   initialState = JSON.parse(localStorage.getItem('budget'));
 }
-console.log(initialState);
 
 function budget(state = initialState, action) {
   switch(action.type) {
@@ -35,6 +34,11 @@ function budget(state = initialState, action) {
       return {
         ...state,
         budget: [...state.budget, action.budgetItem]
+      };
+    case 'UPDATE_BUDGET':
+      return {
+        ...state,
+        budget: action.budget
       }
     default:
       return state;

@@ -45,6 +45,7 @@ class Currency extends Component {
 
   // Save current currency
   changeCurrency(e) {
+    // TODO: взять бюджет из redux
     var budget = JSON.parse(localStorage.getItem('budget'));
     budget.currency = e.target.value;
 

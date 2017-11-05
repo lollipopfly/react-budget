@@ -44,9 +44,12 @@ class Modal extends Component {
     e.preventDefault();
     var budget = JSON.parse(localStorage.getItem('budget'));
 
-    budget.currency = this.state.budget.currency;
-    budget.budget.push(this.state.budget);
+    // Set currency if have not currency
+    if(!budget.currency) {
+      budget.currency = this.state.budget.currency;
+    }
 
+    budget.budget.push(this.state.budget);
     localStorage.setItem('budget', [JSON.stringify(budget)]);
 
     // Update Redux store
@@ -69,8 +72,9 @@ class Modal extends Component {
     var defaultCurrency = 'ruble';
     var defaultBudget = {
       sum: '',
+      defaultCurrencySum: '',
+      deposit: '',
       currency: defaultCurrency,
-      deposit: ''
     }
 
     return defaultBudget;
