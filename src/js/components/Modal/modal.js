@@ -81,10 +81,9 @@ class Modal extends Component {
         );
 
         budget.budget.push(self.state.budget);
-        localStorage.setItem('budget', [JSON.stringify(budget)]);
 
         // Update Redux store
-        self.props.onSave(self.state.budget, self.state.budget.currency, isEmptySelect);
+        self.props.onSave(self.state.budget, budget, self.state.budget.currency, isEmptySelect);
 
         self.setState({ isSuccess: true});
 
@@ -101,11 +100,10 @@ class Modal extends Component {
   }
   getDefaultCurrencySumValue(rates, base, currentCurrencyCode, value) {
     if(currentCurrencyCode !== base) {
-     value = value / rates[currentCurrencyCode];
-     value = Math.round(100 * value) / 100;
+      value = value / rates[currentCurrencyCode];
     }
 
-    return value
+    return Math.round(100 * value) / 100;
   }
   getExchange() {
     const url = 'https://api.fixer.io/latest';
@@ -149,7 +147,7 @@ class Modal extends Component {
   render() {
     return (
       <div>
-        <div className="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
@@ -204,8 +202,8 @@ export default connect(
     myState: state
   }),
   dispatch => ({
-    onSave: (budgetItem, status, isEmptySelect) => {
-      dispatch({type: 'ADD_TO_BUDGET', budgetItem: budgetItem});
+    onSave: (budgetItem, budget, status, isEmptySelect) => {
+      dispatch({type: 'ADD_TO_BUDGET', budgetItem: budgetItem, budget: budget});
 
       // If first time
       if(isEmptySelect) {

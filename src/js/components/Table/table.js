@@ -80,7 +80,7 @@ class Table extends Component {
       var currentCurrencyCode = shortCurrencies[item.currency];
       var value = item.sum;
 
-      // Get value fir default Cyrrency Sum
+      // Get value for default Currency Sum
       item.defaultCurrencySum = this.getDefaultCurrencySumValue(
           data.rates,
           base,
@@ -92,16 +92,14 @@ class Table extends Component {
     });
 
     // Update redux state and localstorage
-    localStorage.setItem('budget', JSON.stringify(budget));
     this.props.onUpdateBudget(budget.budget);
   }
   getDefaultCurrencySumValue(rates, base, currentCurrencyCode, value) {
     if(currentCurrencyCode !== base) {
      value = value / rates[currentCurrencyCode];
-     value = Math.round(100 * value) / 100;
     }
 
-    return value
+    return Math.round(100 * value) / 100;
   }
   changeCurrency(e) {
     console.log(e.target.value);

@@ -18,6 +18,8 @@ class Currency extends Component {
     this.state = {
       isShow: isShow,
     }
+
+    console.log(this.state);
   }
 
   // Save current currency

@@ -4,6 +4,7 @@ import Deposit from '../Deposit/deposit';
 import Currency from '../Currency/currency';
 import Table from '../Table/table';
 import Modal from '../Modal/modal';
+import Chart from '../Chart/chart';
 
 global.Tether = require('tether');
 require('bootstrap');
@@ -35,7 +36,7 @@ class App extends Component {
             </div>
 
             <div className="col-5">
-
+              <Chart />
             </div>
           </div>
         </div>
