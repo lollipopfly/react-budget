@@ -138,8 +138,8 @@ class Table extends Component {
                   <td><input
                     type="number"
                     className="table__input"
-                    value={item.deposit}
-                    disabled={this.props.myState.deposit}
+                    value={item.deposit ? item.deposit : ''}
+                    disabled={!this.props.myState.deposit}
                     onChange={this.changeCurrency}
                     /></td>
                 </tr>

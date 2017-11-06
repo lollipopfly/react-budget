@@ -79,6 +79,9 @@ class Modal extends Component {
           currentCurrencyCode,
           value
         );
+        // Make deposit and sum to number with 2 number after dot
+        self.state.budget.deposit = parseFloat(Math.round(100 * self.state.budget.deposit) / 100);
+        self.state.budget.sum = parseFloat(Math.round(100 * self.state.budget.sum) / 100);
 
         budget.budget.push(self.state.budget);
 

@@ -25,11 +25,9 @@ class Deposit extends Component {
         ...this.state.budget,
         deposit: e.target.checked
       }
-    },function () {
-      localStorage.setItem('budget', JSON.stringify(this.state.budget));
     });
 
-    this.props.onChangeDeposit(e.target.checked);
+    this.props.onChangeDeposit(e.target.checked, budget.budget);
   }
   render() {
     return (
@@ -54,8 +52,8 @@ export default connect(
     myState: state
   }),
   dispatch => ({
-    onChangeDeposit: (status) => {
-      dispatch({type: 'CHANGE_DEPOSIT', status: status})
+    onChangeDeposit: (status, budget) => {
+      dispatch({type: 'CHANGE_DEPOSIT', status: status, budget: budget})
     }
   })
 )(Deposit);

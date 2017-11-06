@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { BarChart, Bar, XAxis, YAxis, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Legend, Tooltip, ResponsiveContainer } from 'recharts';
 
 class Chart extends Component {
   constructor(props) {
@@ -22,6 +22,7 @@ class Chart extends Component {
               margin={{top: 5, right: 30, left: 20, bottom: 5}}>
           <XAxis dataKey="name"/>
           <YAxis/>
+          <Tooltip/>
           <Legend />
           {
             this.colors.map((item, index) => {

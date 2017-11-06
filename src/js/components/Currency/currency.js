@@ -18,8 +18,6 @@ class Currency extends Component {
     this.state = {
       isShow: isShow,
     }
-
-    console.log(this.state);
   }
 
   // Save current currency
@@ -86,7 +84,6 @@ class Currency extends Component {
     });
 
     // Update redux state and localstorage
-    localStorage.setItem('budget', JSON.stringify(budget));
     this.props.onUpdateBudget(budget.budget);
   }
   getUniqueCurrencies(shortCurrencies) {

@@ -18,7 +18,6 @@ class App extends Component {
       <div>
         <br/>
         <br/>
-        <br/>
 
         <div className="container">
           <div className="row header">
@@ -31,11 +30,11 @@ class App extends Component {
           </div>
 
           <div className="row">
-            <div className="col-7">
+            <div className="col-md-7 content-left">
               <Table />
             </div>
 
-            <div className="col-5">
+            <div className="col-md-5">
               <Chart />
             </div>
           </div>
