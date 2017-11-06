@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 class Modal extends Component {
   constructor(props) {
     super(props);
 
+    this.handleChange = this.handleChange.bind(this);
+    this.save = this.save.bind(this);
+
     this.state = {
       budget: this.defaultBudget(),
       isSuccess: false,
     }
-
-    this.handleChange = this.handleChange.bind(this);
-    this.save = this.save.bind(this);
 
     let currencies = [
       {
@@ -33,6 +34,13 @@ class Modal extends Component {
       },
     ];
 
+    this.shortCurrencies = {
+      'ruble': 'RUB',
+      'dollar': 'USD',
+      'euro': 'EUR',
+      'yen': 'JPY'
+    }
+
     // Make options
     this.optionList = currencies.map((option, key) =>
       <option key={key} value={option.value}>
@@ -42,30 +50,78 @@ class Modal extends Component {
   }
   save(e) {
     e.preventDefault();
+
+    var self = this;
     var budget = JSON.parse(localStorage.getItem('budget'));
     var isEmptySelect = false;
+
     // Set currency if have not currency
     if(!budget.currency) {
       isEmptySelect = true;
       budget.currency = this.state.budget.currency;
     }
 
-    budget.budget.push(this.state.budget);
-    localStorage.setItem('budget', [JSON.stringify(budget)]);
+   this.getExchange()
+    .then(data => {
+      if(data) {
+        var currentCurrencyCode = self.shortCurrencies[self.state.budget.currency];
+        var base = data.base;
+        var value = self.state.budget.sum;
 
-    // Update Redux store
-    this.props.onSave(this.state.budget, this.state.budget.currency, isEmptySelect);
+        if(isEmptySelect) {
+          var base = currentCurrencyCode;
+        }
 
-    this.setState({ isSuccess: true});
+        // Get value fir default Cyrrency Sum
+        self.state.budget.defaultCurrencySum = this.getDefaultCurrencySumValue(
+          data.rates,
+          base,
+          currentCurrencyCode,
+          value
+        );
 
-    setTimeout(function() {
-      $('#myModal').modal('hide');
+        budget.budget.push(self.state.budget);
+        localStorage.setItem('budget', [JSON.stringify(budget)]);
 
-      this.setState({
-        budget: this.defaultBudget(),
-        isSuccess: false
-      });
-    }.bind(this), 1000);
+        // Update Redux store
+        self.props.onSave(self.state.budget, self.state.budget.currency, isEmptySelect);
+
+        self.setState({ isSuccess: true});
+
+        setTimeout(function() {
+          $('#myModal').modal('hide');
+
+          self.setState({
+            budget: self.defaultBudget(),
+            isSuccess: false
+          });
+        }.bind(self), 1000);
+      }
+    });
+  }
+  getDefaultCurrencySumValue(rates, base, currentCurrencyCode, value) {
+    if(currentCurrencyCode !== base) {
+     value = value / rates[currentCurrencyCode];
+     value = Math.round(100 * value) / 100;
+    }
+
+    return value
+  }
+  getExchange() {
+    const url = 'https://api.fixer.io/latest';
+    var baseCurrency = this.shortCurrencies[this.props.myState.currency];
+
+    return axios.get(url, {
+      params: {
+        base: baseCurrency,
+      }
+    })
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      return false;
+    });
   }
 
   // Get defaulb budget
