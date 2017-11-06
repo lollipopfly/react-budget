@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 class Currency extends Component {
   constructor(props) {
@@ -26,6 +27,76 @@ class Currency extends Component {
 
     localStorage.setItem('budget', JSON.stringify(budget));
     this.props.onChangeCurrency(e.target.value);
+
+    // Update data from exchage api
+    this.updateExchange();
+  }
+  updateExchange() {
+    var self = this;
+    const cookieName = 'is_cached';
+    const url = 'https://api.fixer.io/latest';
+    const shortCurrencies = {
+      'ruble': 'RUB',
+      'dollar': 'USD',
+      'euro': 'EUR',
+      'yen': 'JPY'
+    }
+    var date = new Date();
+    var time = date.getTime();
+    time += 3600 * 1000;
+    date.setTime(time);
+
+    // Make uniqe currencies
+    var currenciesList = this.getUniqueCurrencies(shortCurrencies);
+    var currenciesString = currenciesList.join();
+    var baseCurrency = shortCurrencies[this.props.myState.currency];
+
+    // Get exchange rates by main currency
+    axios.get(url, {
+      params: {
+        base: baseCurrency,
+      }
+    })
+    .then(function (response) {
+      self.saveCache(cookieName, true, date, '/');
+      self.updateBudget(response.data, shortCurrencies);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+  updateBudget(data, shortCurrencies) {
+    var base = data.base;
+    var budget = this.props.myState;
+
+    budget.budget.map((item, index) => {
+      var currentCurrencyCode = shortCurrencies[item.currency];
+      var value = item.sum;
+
+      if(currentCurrencyCode !== base) {
+       value = item.sum / data.rates[currentCurrencyCode];
+       value = Math.round(100 * value) / 100;
+      }
+
+      item.defaultCurrencySum = value;
+
+      return item;
+    });
+
+    // Update redux state and localstorage
+    localStorage.setItem('budget', JSON.stringify(budget));
+    this.props.onUpdateBudget(budget.budget);
+  }
+  getUniqueCurrencies(shortCurrencies) {
+    var currencies = [];
+
+    this.props.myState.budget.forEach( function( item ) {
+      if(currencies.indexOf(shortCurrencies[item.currency]) == -1) {
+        currencies.push(shortCurrencies[item.currency]);
+      }
+    });
+
+    return currencies;
   }
   filterCurrenciesList() {
     let currencies = {
@@ -52,6 +123,13 @@ class Currency extends Component {
 
     return optionList;
   }
+  saveCache(name, value, expires, path, domain, secure) {
+    document.cookie = name + "=" + escape(value) +
+      ((expires) ? "; expires=" + expires.toUTCString() : "") +
+      ((path) ? "; path=" + path : "") +
+      ((domain) ? "; domain=" + domain : "") +
+      ((secure) ? "; secure" : "");
+  }
   render() {
     return (
       <div className={this.props.myState.currency ? 'text-right' : 'hidden'}>
@@ -63,7 +141,6 @@ class Currency extends Component {
           defaultValue={this.props.myState.currency}>
           {this.filterCurrenciesList()}
         </select>
-
       </div>
     )
   }
@@ -76,6 +153,9 @@ export default connect(
   dispatch => ({
     onChangeCurrency: (status) => {
       dispatch({type: 'CHANGE_CURRENCY', status: status});
+    },
+    onUpdateBudget: (budget) => {
+      dispatch({type: 'UPDATE_BUDGET', budget: budget});
     }
   })
 )(Currency);

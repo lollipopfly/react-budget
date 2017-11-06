@@ -9,14 +9,13 @@ class Table extends Component {
     this.changeCurrency = this.changeCurrency.bind(this);
 
     const cookieName = 'is_cached';
+    const url = 'https://api.fixer.io/latest';
     const shortCurrencies = {
       'ruble': 'RUB',
       'dollar': 'USD',
       'euro': 'EUR',
       'yen': 'JPY'
     }
-
-    const url = 'https://api.fixer.io/latest';
     var date = new Date();
     var time = date.getTime();
     time += 3600 * 1000;
@@ -28,7 +27,6 @@ class Table extends Component {
     }
   }
   getExchange(url, date, cookieName, shortCurrencies) {
-    console.log('update');
     // Make uniqe currencies
     var self = this;
     var currenciesList = this.getUniqueCurrencies(shortCurrencies);
@@ -48,7 +46,6 @@ class Table extends Component {
     .catch(function (error) {
       console.log(error);
     });
-
   }
   getUniqueCurrencies(shortCurrencies) {
     var currencies = [];
