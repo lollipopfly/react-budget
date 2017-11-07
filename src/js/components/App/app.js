@@ -15,10 +15,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <br/>
-        <br/>
-
-        <div className="container">
+        <div className="container mt-40">
           <div className="row header">
             <div className="col-6">
               <Deposit />

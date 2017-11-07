@@ -6,27 +6,9 @@ class Deposit extends Component {
     super(props);
 
     this.changeDeposit = this.changeDeposit.bind(this);
-
-    var budget = JSON.parse(localStorage.getItem('budget'));
-    var localStorageValue = budget.deposit;
-
-    this.state = {
-      budget: budget,
-      defaultValue: localStorageValue
-    };
   }
   changeDeposit(e) {
-    var budget = JSON.parse(localStorage.getItem('budget'));
-
-    this.setState({
-      defaultValue: e.target.checked,
-      budget: {
-        ...this.state.budget,
-        deposit: e.target.checked
-      }
-    });
-
-    this.props.onChangeDeposit(e.target.checked, budget.budget);
+    this.props.onChangeDeposit(e.target.checked, this.props.myState.budget);
   }
   render() {
     return (
@@ -36,7 +18,7 @@ class Deposit extends Component {
         <label htmlFor="deposit__input" className="form-check-label">
           <input type="checkbox"
                  name="deposit"
-                 checked={this.state.defaultValue}
+                 checked={this.props.myState.deposit}
                  onChange={this.changeDeposit}
                  id="deposit__input"
                  className="form-check-input" /> С вкладами

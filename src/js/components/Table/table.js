@@ -15,16 +15,13 @@ class Table extends Component {
       'euro': 'EUR',
       'yen': 'JPY'
     }
-    var date = new Date();
-    var time = date.getTime();
-    time += 3600 * 1000;
-    date.setTime(time);
 
     // Get exchange
     if(this.props.myState.budget.length > 0 && !this.isCached(cookieName)) {
-      this.getExchange(url, date, cookieName, shortCurrencies);
+      this.getExchange(url, this.getExpireDate(), cookieName, shortCurrencies);
     }
   }
+
   getExchange(url, date, cookieName, shortCurrencies) {
     // Make uniqe currencies
     var self = this;
@@ -42,10 +39,9 @@ class Table extends Component {
       self.saveCache(cookieName, true, date, '/');
       self.updateBudget(response.data, shortCurrencies);
     })
-    .catch(function (error) {
-      console.log(error);
-    });
+    .catch(function (error) {});
   }
+
   getUniqueCurrencies(shortCurrencies) {
     var currencies = [];
 
@@ -57,6 +53,7 @@ class Table extends Component {
 
     return currencies;
   }
+
   isCached(name) {
     var matches = document.cookie.match(new RegExp(
       "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
@@ -64,6 +61,7 @@ class Table extends Component {
 
     return JSON.parse(matches ? decodeURIComponent(matches[1]) : false)
   }
+
   saveCache(name, value, expires, path, domain, secure) {
     document.cookie = name + "=" + escape(value) +
       ((expires) ? "; expires=" + expires.toUTCString() : "") +
@@ -71,6 +69,7 @@ class Table extends Component {
       ((domain) ? "; domain=" + domain : "") +
       ((secure) ? "; secure" : "");
   }
+
   updateBudget(data, shortCurrencies) {
     var base = data.base;
     var budget = this.props.myState;
@@ -93,6 +92,7 @@ class Table extends Component {
     // Update redux state and localstorage
     this.props.onUpdateBudget(budget.budget);
   }
+
   getDefaultCurrencySumValue(rates, base, currentCurrencyCode, value) {
     if(currentCurrencyCode !== base) {
      value = value / rates[currentCurrencyCode];
@@ -100,12 +100,24 @@ class Table extends Component {
 
     return Math.round(100 * value) / 100;
   }
+
+  getExpireDate() {
+    var date = new Date();
+    var time = date.getTime();
+    time += 3600 * 1000;
+    date.setTime(time);
+
+    return date;
+  }
+
   changeCurrency(e) {
     console.log(e.target.value);
   }
+
   showModal() {
     $('#myModal').modal()
   }
+
   render() {
     return (
       <div>

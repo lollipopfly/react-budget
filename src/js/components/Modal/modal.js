@@ -33,20 +33,21 @@ class Modal extends Component {
       },
     ];
 
-    this.shortCurrencies = {
-      'ruble': 'RUB',
-      'dollar': 'USD',
-      'euro': 'EUR',
-      'yen': 'JPY'
-    }
-
     // Make options
     this.optionList = currencies.map((option, key) =>
       <option key={key} value={option.value}>
         {option.text}
       </option>
     );
+
+    this.shortCurrencies = {
+      'ruble': 'RUB',
+      'dollar': 'USD',
+      'euro': 'EUR',
+      'yen': 'JPY'
+    }
   }
+
   save(e) {
     e.preventDefault();
 
@@ -78,9 +79,10 @@ class Modal extends Component {
           currentCurrencyCode,
           value
         );
-        // Make deposit and sum to number with 2 number after dot
-        self.state.budget.deposit = parseFloat(Math.round(100 * self.state.budget.deposit) / 100);
-        self.state.budget.sum = parseFloat(Math.round(100 * self.state.budget.sum) / 100);
+
+        // Formate values with 2 number after dot
+        self.state.budget.deposit = self.formateNumber(self.state.budget.deposit);
+        self.state.budget.sum = self.formateNumber(self.state.budget.sum);
 
         budget.budget.push(self.state.budget);
 
@@ -100,13 +102,19 @@ class Modal extends Component {
       }
     });
   }
+
   getDefaultCurrencySumValue(rates, base, currentCurrencyCode, value) {
     if(currentCurrencyCode !== base) {
       value = value / rates[currentCurrencyCode];
     }
 
+    return this.formateNumber(value);
+  }
+
+  formateNumber(value) {
     return Math.round(100 * value) / 100;
   }
+
   getExchange() {
     const url = 'https://api.fixer.io/latest';
     var baseCurrency = this.shortCurrencies[this.props.myState.currency];
@@ -136,6 +144,7 @@ class Modal extends Component {
 
     return defaultBudget;
   }
+
   handleChange(e) {
     var value = e.target.value;
     var name = e.target.name;

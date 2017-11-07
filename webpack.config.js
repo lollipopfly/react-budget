@@ -11,10 +11,11 @@ var inProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   entry: {
+    // если разделить по точкам будут создаваться лишние .js файлы
     app: [
+      './src/js/index.js',
       './src/scss/style.scss'
-    ],
-    index: './src/js/index.js',
+    ]
   },
 
   output: {
@@ -105,4 +106,3 @@ if(!inProduction) {
     new webpack.SourceMapDevToolPlugin()
   );
 }
-

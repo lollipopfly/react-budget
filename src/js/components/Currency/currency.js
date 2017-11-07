@@ -7,30 +7,16 @@ class Currency extends Component {
     super(props);
 
     this.changeCurrency = this.changeCurrency.bind(this);
-
-    let isShow = false;
-
-    if(this.props.myState.budget.length > 0) {
-      isShow = true
-    }
-
-    this.state = {
-      isShow: isShow,
-    }
   }
 
   // Save current currency
   changeCurrency(e) {
-    var budget = this.props.myState;
-    budget.currency = e.target.value;
-
-    localStorage.setItem('budget', JSON.stringify(budget));
     this.props.onChangeCurrency(e.target.value);
 
     // Update data from exchage api
-    this.updateExchange();
+    this.updateExchange(e.target.value);
   }
-  updateExchange() {
+  updateExchange(newCurrency) {
     var self = this;
     const cookieName = 'is_cached';
     const url = 'https://api.fixer.io/latest';
@@ -40,15 +26,11 @@ class Currency extends Component {
       'euro': 'EUR',
       'yen': 'JPY'
     }
-    var date = new Date();
-    var time = date.getTime();
-    time += 3600 * 1000;
-    date.setTime(time);
 
     // Make uniqe currencies
     var currenciesList = this.getUniqueCurrencies(shortCurrencies);
     var currenciesString = currenciesList.join();
-    var baseCurrency = shortCurrencies[this.props.myState.currency];
+    var baseCurrency = shortCurrencies[newCurrency];
 
     // Get exchange rates by main currency
     axios.get(url, {
@@ -57,12 +39,10 @@ class Currency extends Component {
       }
     })
     .then(function (response) {
-      self.saveCache(cookieName, true, date, '/');
+      self.saveCache(cookieName, true, self.getExpireDate(), '/');
       self.updateBudget(response.data, shortCurrencies);
     })
-    .catch(function (error) {
-      console.log(error);
-    });
+    .catch(function (error) {});
   }
   updateBudget(data, shortCurrencies) {
     var base = data.base;
@@ -82,7 +62,7 @@ class Currency extends Component {
       return item;
     });
 
-    // Update redux state and localstorage
+    // Update
     this.props.onUpdateBudget(budget.budget);
   }
   getUniqueCurrencies(shortCurrencies) {
@@ -127,6 +107,14 @@ class Currency extends Component {
       ((path) ? "; path=" + path : "") +
       ((domain) ? "; domain=" + domain : "") +
       ((secure) ? "; secure" : "");
+  }
+  getExpireDate() {
+    var date = new Date();
+    var time = date.getTime();
+    time += 3600 * 1000;
+    date.setTime(time);
+
+    return date;
   }
   render() {
     return (
