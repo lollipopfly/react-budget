@@ -24,7 +24,7 @@ module.exports = {
   },
 
   devServer: {
-    overlay: inProduction,
+    overlay: !inProduction,
     contentBase: path.join(__dirname, "dist"),
   },
 
