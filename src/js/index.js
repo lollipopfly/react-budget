@@ -44,7 +44,7 @@ function budget(state = initialState, action) {
       var budget = {
         ...state,
         budget: [...state.budget, action.budgetItem],
-        budgetChart: formatBudget([...state.budget, action.budgetItem])
+        budgetChart: formatBudget([...state.budget, action.budgetItem], state.deposit)
       };
 
       localStorage.setItem('budget', [JSON.stringify(budget)]);
@@ -54,7 +54,7 @@ function budget(state = initialState, action) {
       var budget = {
         ...state,
         budget: action.budget,
-        budgetChart: formatBudget(action.budget)
+        budgetChart: formatBudget(action.budget, state.deposit)
       };
 
       localStorage.setItem('budget', [JSON.stringify(budget)]);
@@ -69,7 +69,7 @@ function budget(state = initialState, action) {
 var store = createStore(budget, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 // format Budget list for chart
-function formatBudget(budget, deposit = false) {
+function formatBudget(budget, deposit) {
   var auarterCount = 4;
   var quarter = [
     { name: 'сегодня' },
@@ -78,40 +78,44 @@ function formatBudget(budget, deposit = false) {
     { name: 'через год' },
   ];
 
-  quarter.map((item, index) => {
-    budget.map((row, key) => {
-      var value = 0;
+  if(budget.length > 0) {
+    quarter.map((item, index) => {
+      budget.map((row, key) => {
+        var value = 0;
 
-      if(deposit && row.deposit) {
-        switch(index + 1) {
-          case 1:
-            value = row.defaultCurrencySum;
-            break;
-          case 2:
-            value = row.defaultCurrencySum + (row.deposit/2/100*row.defaultCurrencySum);
-            break;
-          case 3:
-            value = row.defaultCurrencySum + (row.deposit/1.3333/100*row.defaultCurrencySum);
-            break;
-          case 4:
-            value = row.defaultCurrencySum + (row.deposit/100*row.defaultCurrencySum);
-            break;
+        if(deposit && row.deposit) {
+          switch(index + 1) {
+            case 1:
+              value = 0;
+              break;
+            case 2:
+              value = (row.deposit/2/100*row.defaultCurrencySum);
+              break;
+            case 3:
+              value = (row.deposit/1.3333/100*row.defaultCurrencySum);
+              break;
+            case 4:
+              value = (row.deposit/100*row.defaultCurrencySum);
+              break;
+          }
+
+          if(item[row.currency + '_deposit']) {
+            item[row.currency + '_deposit'] += value;
+          } else {
+            item[row.currency + '_deposit'] = value;
+          }
+
+          item[row.currency + '_deposit'] = Math.round(item[row.currency + '_deposit'] * 100) / 100;
         }
-      } else {
-        value = row.defaultCurrencySum;
-      }
 
-      if(item[row.currency]) {
-        item[row.currency] += value;
-      } else {
-        item[row.currency] = value;
-      }
-
-      item[row.currency] = Math.round(item[row.currency] * 100) / 100;
+        item[row.currency] = row.defaultCurrencySum;
+      });
     });
-  });
 
-  return quarter;
+    return quarter;
+  }
+
+  return [];
 }
 
 ReactDOM.render(

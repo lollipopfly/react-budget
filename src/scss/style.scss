@@ -92,3 +92,7 @@ body {
     min-height: 350px;
   }
 }
+.recharts-cartesian-axis-line,
+.recharts-cartesian-axis-tick-line {
+  display: none;
+}

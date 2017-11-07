@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import Deposit from '../Deposit/deposit';
 import Currency from '../Currency/currency';
 import Table from '../Table/table';

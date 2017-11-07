@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { BarChart, Bar, XAxis, YAxis, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 class Chart extends Component {
   constructor(props) {
@@ -9,9 +8,13 @@ class Chart extends Component {
 
     this.colors = [
       {'ruble' : '#2765cc'},
+      {'ruble_deposit' : '#66a3e0'},
       {'dollar': '#299932'},
+      {'dollar_deposit': '#66c285'},
       {'euro': '#f79904'},
+      {'euro_deposit': '#fac266'},
       {'yen': '#ee2222'},
+      {'yen_deposit': '#f3696a'},
     ];
   }
   render () {
@@ -23,7 +26,6 @@ class Chart extends Component {
           <XAxis dataKey="name"/>
           <YAxis/>
           <Tooltip/>
-          <Legend />
           {
             this.colors.map((item, index) => {
               return (
