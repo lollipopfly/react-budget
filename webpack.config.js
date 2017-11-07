@@ -28,6 +28,10 @@ module.exports = {
     contentBase: path.join(__dirname, "dist"),
   },
 
+  watchOptions: {
+    poll: true
+  },
+
   module: {
     // SASS
     rules: [
